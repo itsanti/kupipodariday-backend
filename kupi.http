@@ -1,0 +1,84 @@
+@base = http://localhost:3000
+
+////////////
+// AUTH
+////////////
+### POST /signup
+POST http://localhost:3000/signup
+content-type: application/json
+
+{
+  "username": "admin",
+  "about": "exampleuser",
+  "email": "user1@yandex.ru",
+  "password": "123"
+}
+
+
+### POST /signin
+POST http://localhost:3000/signin
+content-type: application/json
+
+{
+  "username": "admin",
+  "password": "123"
+}
+
+###
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc2MzA1ODExMSwiZXhwIjoxNzYzMDYxNzExfQ.qwzDDFIl8LfxR3plwlOIxBn5ivRwlgORJg0kr3n9lQ4
+
+////////////
+// USERS
+////////////
+### GET /users/me
+GET {{base}}/users/me
+Authorization: Bearer {{token}}
+
+### PATCH /users/me
+PATCH {{base}}/users/me
+Authorization: Bearer {{token}}
+content-type: application/json
+
+{
+  "username": "admin",
+  "about": "admin user"
+}
+
+### GET /users/me/wishes
+GET {{base}}/users/me/wishes
+Authorization: Bearer {{token}}
+
+### GET /users/{username}
+GET {{base}}/users/test
+Authorization: Bearer {{token}}
+
+### GET /users/{username}/wishes
+GET {{base}}/users/test/wishes
+Authorization: Bearer {{token}}
+
+### POST /users/find
+POST {{base}}/users/find
+Authorization: Bearer {{token}}
+content-type: application/json
+
+{
+  "query": "admin"
+}
+
+////////////
+// Offers
+////////////
+### GET /offers
+GET {{base}}/offers
+Authorization: Bearer {{token}}
+
+### GET /offers/{id}
+GET {{base}}/offers/2
+Authorization: Bearer {{token}}
+
+////////////
+// wishlistlists
+////////////
+### GET /wishlistlists
+GET {{base}}/wishlistlists/2
+Authorization: Bearer {{token}}

@@ -1,3 +1,11 @@
+export enum PostgresErrorCode {
+  UniqueViolation = '23505', // Нарушение уникального ограничения
+  ForeignKeyViolation = '23503', // Нарушение внешнего ключа
+  NotNullViolation = '23502', // Нарушение NOT NULL
+  CheckViolation = '23514', // Нарушение CHECK
+  ExclusionViolation = '23P01', // Нарушение EXCLUDE
+}
+
 export const ERROR_MESSAGES = {
   NOT_FOUND: 'Resource not found.',
   USER_ALREADY_EXISTS: 'A user with this email or username already exists.',

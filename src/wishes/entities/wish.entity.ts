@@ -76,7 +76,11 @@ export class Wish {
   owner: User;
 
   @IsArray()
-  @OneToMany(() => Offer, (offer) => offer.item)
+  @OneToMany(() => Offer, (offer) => offer.item, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   offers: Offer[];
 
   @IsArray()

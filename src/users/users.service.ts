@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { Like, Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 
 import {
   ConflictException,
@@ -115,8 +115,8 @@ export class UsersService {
     }
     const users = await this.userRepository.find({
       where: [
-        { email: Like(`%${findUsersDto.query}%`) },
-        { username: Like(`%${findUsersDto.query}%`) },
+        { email: ILike(`%${findUsersDto.query}%`) },
+        { username: ILike(`%${findUsersDto.query}%`) },
       ],
     });
     return TransformUtil.toDtoArray(UserPublicProfileResponseDto, users);

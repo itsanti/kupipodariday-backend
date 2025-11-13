@@ -7,7 +7,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { SigninUserDto } from './dto/signin-user.dto';
 import { SigninUserResponseDto } from './dto/signin-user-response.dto';
 import { SignupUserResponseDto } from './dto/signup-user-response.dto';
-import { ERROR_MESSAGES } from '../constants/errors';
+import { ERROR_MESSAGES, PostgresErrorCode } from '../constants/errors';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { TransformUtil } from '../utils/transform.util';
@@ -20,21 +20,19 @@ export class AuthService {
   ) {}
 
   async signup(createUserDto: CreateUserDto): Promise<SignupUserResponseDto> {
-    const existing = await this.usersService.findByUsernameOrEmail(
-      createUserDto.username,
-      createUserDto.email,
-    );
-    if (existing) {
-      throw new ConflictException(ERROR_MESSAGES.USER_ALREADY_EXISTS);
-    }
-
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-    const user = await this.usersService.create({
-      ...createUserDto,
-      password: hashedPassword,
-      roles: ['user'],
-    } as User);
-    return TransformUtil.toDto(SignupUserResponseDto, user);
+    try {
+      const user = await this.usersService.create({
+        ...createUserDto,
+        password: hashedPassword,
+        roles: ['user'],
+      } as User);
+      return TransformUtil.toDto(SignupUserResponseDto, user);
+    } catch (error) {
+      if (error.code === PostgresErrorCode.UniqueViolation) {
+        throw new ConflictException(ERROR_MESSAGES.USER_ALREADY_EXISTS);
+      }
+    }
   }
 
   async login(signinUserDto: SigninUserDto): Promise<SigninUserResponseDto> {
